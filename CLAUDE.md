@@ -1,7 +1,9 @@
 # CLAUDE.md — POS Monorepo
+
 > Instructions only. Read fully. Follow exactly.
 
 ## What This Is
+
 Laravel 11 POS Monorepo — three apps, one repository.
 Multi-tenant. Web + Mobile API + Admin Panel.
 
@@ -18,41 +20,47 @@ pos-monorepo/
 ```
 
 ## The Golden Monorepo Rule
+
 Shared code goes in packages/ ONLY. Never copy between apps.
 
 ## Stack
-| App | Framework | Auth | Port |
-|---|---|---|---|
-| web | Laravel 11 + Blade + Alpine.js | Session | 8000 |
-| mobile-api | Laravel 11 + Sanctum | Token | 8001 |
-| admin | Laravel 11 + Blade | Session | 8002 |
+
+| App        | Framework                      | Auth    | Port |
+| ---------- | ------------------------------ | ------- | ---- |
+| web        | Laravel 11 + Blade + Alpine.js | Session | 8000 |
+| mobile-api | Laravel 11 + Sanctum           | Token   | 8001 |
+| admin      | Laravel 11 + Blade             | Session | 8002 |
 
 PHP 8.2 | MySQL 8 (shared DB across all apps)
 
 ## Multi-Tenancy — CRITICAL
+
 - EVERY data table has tenant_id
 - EVERY query scoped: ->where('tenant_id', $tenantId)
 - admin/ manages tenants — it is NOT tenant-scoped
 - web/ and mobile-api/ are ALWAYS tenant-scoped
 
 ## Naming — No Exceptions
-| Thing | Convention | Example |
-|---|---|---|
-| Controllers | PascalCase singular | SaleController |
-| Models | PascalCase singular | Sale |
-| Services | PascalCase + Service | SaleService |
-| API Resources | PascalCase + Resource | SaleResource |
-| Form Requests | PascalCase + Request | StoreSaleRequest |
-| DB columns | snake_case | tenant_id, total_amount |
-| Routes | kebab-case | /point-of-sale |
+
+| Thing         | Convention            | Example                 |
+| ------------- | --------------------- | ----------------------- |
+| Controllers   | PascalCase singular   | SaleController          |
+| Models        | PascalCase singular   | Sale                    |
+| Services      | PascalCase + Service  | SaleService             |
+| API Resources | PascalCase + Resource | SaleResource            |
+| Form Requests | PascalCase + Request  | StoreSaleRequest        |
+| DB columns    | snake_case            | tenant_id, total_amount |
+| Routes        | kebab-case            | /point-of-sale          |
 
 ## Controllers — All Apps
+
 - Thin only. Validate → Service → Response.
 - Max 30 lines per method.
 - Always Form Requests. Never inline validate.
 - No business logic. Ever.
 
 ## Services — Core Services
+
 - SaleService — sale lifecycle
 - StockService — inventory
 - PaymentService — payments (never bypass this)
@@ -62,6 +70,7 @@ PHP 8.2 | MySQL 8 (shared DB across all apps)
 - TenantService — tenant management (admin only)
 
 ## Database Rules — Every Migration
+
 ```php
 $table->unsignedBigInteger('tenant_id'); // all data tables
 $table->index('tenant_id');
@@ -70,6 +79,7 @@ $table->timestamps();
 ```
 
 ## Do Not
+
 - ❌ Logic in controllers
 - ❌ Copy code between apps (use packages/)
 - ❌ Raw SQL anywhere
@@ -82,6 +92,7 @@ $table->timestamps();
 - ❌ Touch .env — use config() only
 
 ## Known Failure Modes
+
 - ! You forget tenant_id on new queries
 - ! You put logic in controllers instead of services
 - ! You duplicate code between apps instead of packages/
@@ -90,6 +101,7 @@ $table->timestamps();
 - ! You work in the wrong app for the task
 
 ## Commands
+
 ```bash
 cd apps/web && php artisan serve --port=8000
 cd apps/mobile-api && php artisan serve --port=8001
@@ -99,7 +111,9 @@ bash scripts/serve-all.sh
 ```
 
 ## How to Ask
+
 - State which app you are working in FIRST
 - Blocked? Ask ONE sharp question. Do not guess.
 - Show plan before touching more than 2 files.
 - "Done" = runs + tested + tenant-scoped + follows this file.
+-
