@@ -1,0 +1,30 @@
+{
+  "model": "claude-sonnet-4-5",
+  "permissions": {
+    "allow": [
+      "Read all project files",
+      "Write apps/*/app/ files",
+      "Write apps/*/resources/ files",
+      "Write apps/*/routes/ files",
+      "Write apps/*/database/ files",
+      "Write packages/ files",
+      "Write tasks/ files",
+      "Run php artisan commands",
+      "Run composer commands",
+      "Run bash scripts/*.sh"
+    ],
+    "deny": [
+      "Edit any .env directly",
+      "Delete migration files",
+      "Modify PaymentService without confirmation",
+      "Modify StockService without confirmation",
+      "Push to git without /ship command",
+      "Drop database tables"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": ".claude/hooks/PostToolUse.sh",
+    "SessionStart": ".claude/hooks/SessionStart.sh",
+    "PreCompact": ".claude/hooks/PreCompact.sh"
+  }
+}

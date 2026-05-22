@@ -1,0 +1,7 @@
+{
+  "name": "pos/config",
+  "description": "Shared config for POS Monorepo",
+  "type": "library",
+  "require": { "php": "^8.2" },
+  "autoload": { "psr-4": { "Pos\\Config\\": "src/" } }
+}
